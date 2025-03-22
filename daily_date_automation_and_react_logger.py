@@ -1,12 +1,20 @@
 import discord
 import datetime
+import random
 from discord.ext import tasks, commands
+import os
+from dotenv import load_dotenv
+from motivational_quotes import motivational_quotes  # Import the quotes array
 
 # Replace with your bot token
-TOKEN = "Your token here"
+load_dotenv()
+TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
 # Replace with your actual channel ID
-CHANNEL_ID = YOUR_CHANNEL_ID
+CHANNEL_ID = 
+
+# Replace with your logging channel ID
+LOG_CHANNEL_ID =
 
 intents = discord.Intents.default()
 intents.reactions = True  # Enable reaction tracking
@@ -21,13 +29,13 @@ async def on_ready():
     post_date.start()
 
 
-@tasks.loop(time=datetime.time(hour=5, minute=0)) # Runs daily at 5 AM
+@tasks.loop(time=datetime.time(hour=5, minute=0))  # Runs daily at 5 AM
 async def post_date():
     channel = bot.get_channel(CHANNEL_ID)
     if channel:
         today = datetime.datetime.now().strftime("%d/%m/%Y")
-        message = await channel.send(f"**Good morning!** Today's date: **{today}** A new day, a fresh start, Show up, "
-                                     f"put in the work, and stack those smalls wins!")
+        quote = random.choice(motivational_quotes)
+        message = await channel.send(f"**Good morning!** Today's date: **{today}** {quote}")
         bot.last_message_id = message.id  # Store message ID for tracking reactions
 
 
@@ -39,7 +47,7 @@ async def on_reaction_add(reaction, user):
         print(f"{user.name} checked in at {timestamp}")
 
         # Log the data in another channel
-        log_channel = bot.get_channel(YOUR CHANNEL ID HERE)
+        log_channel = bot.get_channel(LOG_CHANNEL_ID)
         if log_channel:
             await log_channel.send(f"✅ {user.mention} checked in at **{timestamp}**.")
 
